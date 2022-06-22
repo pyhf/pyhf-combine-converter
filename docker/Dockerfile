@@ -3,7 +3,7 @@
 ARG BASE_IMAGE=aperloff/cms-cvmfs-docker:latest
 FROM ${BASE_IMAGE} as base
 
-ARG ARG_CVMFS_MOUNTS
+ARG ARG_CVMFS_MOUNTS="cms.cern.ch oasis.opensciencegrid.org"
 ARG ARG_MY_UID
 ARG ARG_MY_GID
 ARG CMSSW_VERSION="CMSSW_11_2_0"
