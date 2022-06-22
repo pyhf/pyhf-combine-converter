@@ -1,17 +1,27 @@
+# syntax=docker/dockerfile:1.3-labs
+
 ARG BASE_IMAGE=aperloff/cms-cvmfs-docker:latest
 FROM ${BASE_IMAGE} as base
 
-ENV CVMFS_MOUNTS="cms.cern.ch oasis.opensciencegrid.org"
-
+ARG ARG_CVMFS_MOUNTS
+ARG ARG_MY_UID
+ARG ARG_MY_GID
 ARG CMSSW_VERSION="CMSSW_11_2_0"
 ARG COMBINED_LIMIT_TAG="py3"
 ARG COMBINE_HARVESTER_TAG="113x"
+
+ENV CVMFS_MOUNTS=${ARG_CVMFS_MOUNTS}
+ENV MY_UID=${ARG_MY_UID}
+ENV MY_GID=${ARG_MY_GID}
 
 # N.B.: Using `python -m pip install --ignore-installed --upgrade` is a major anti-pattern
 # and is _only_ being used here to intentionally avoid the old packages installed through
 # /cvmfs. Using `--ignore-installed --upgrade` is almost never what you want to do, so do
 # not copy this pattern in general!
-RUN . /cvmfs/cms.cern.ch/cmsset_default.sh && \
+RUN --security=insecure . /mount_cvmfs.sh && \
+    mount_cvmfs && \
+    . /home/cmsusr/.bashrc && \
+    . /cvmfs/cms.cern.ch/cmsset_default.sh && \
     cmsrel "${CMSSW_VERSION}" && \
     cd "${CMSSW_VERSION}"/src && \
     cmsenv && \
