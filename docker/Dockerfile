@@ -20,42 +20,57 @@ ENV MY_GID=${ARG_MY_GID}
 # and is _only_ being used here to intentionally avoid the old packages installed through
 # /cvmfs. Using `--ignore-installed --upgrade` is almost never what you want to do, so do
 # not copy this pattern in general!
+# RUN --security=insecure . /mount_cvmfs.sh && \
+#     mount_cvmfs && \
+#     . /home/cmsusr/.bashrc && \
+#     . /cvmfs/cms.cern.ch/cmsset_default.sh && \
+#     cmsrel "${CMSSW_VERSION}" && \
+#     cd "${CMSSW_VERSION}"/src && \
+#     cmsenv && \
+#     export PATH="/cvmfs/cms.cern.ch/slc7_amd64_gcc900/external/cmake/3.18.2/bin:${PATH}" && \
+#     git clone https://gitlab.cern.ch/will/TRooFit.git && \
+#     cmake \
+#         -DCMAKE_INSTALL_PREFIX=/home/cmsusr/"${CMSSW_VERSION}" \
+#         -S TRooFit \
+#         -B build && \
+#     cmake build -LH && \
+#     cmake \
+#         --build build \
+#         --clean-first \
+#         --parallel $(($(nproc) - 1)) && \
+#     cmake --build build --target install && \
+#     rm -rf build && \
+#     git clone \
+#         --depth 1 \
+#         https://github.com/cms-analysis/HiggsAnalysis-CombinedLimit.git \
+#         --branch "${COMBINED_LIMIT_TAG}" \
+#         --single-branch \
+#         HiggsAnalysis/CombinedLimit && \
+#     git clone \
+#         --depth 1 \
+#         https://github.com/nsmith-/CombineHarvester.git \
+#         --branch "${COMBINE_HARVESTER_TAG}" \
+#         --single-branch \
+#         CombineHarvester && \
+#     scram b --jobs $(($(nproc) - 1)) && \
+#     cmsenv && \
+#     python3 -m pip --no-cache-dir --verbose install --upgrade --user pip setuptools wheel && \
+#     python3 -m pip --no-cache-dir --verbose install --ignore-installed --upgrade --user 'pyhf[xmlio,minuit,contrib]' && \
+#     echo 'export PATH=/home/cmsusr/.local/bin:${PATH}' >> /home/cmsusr/.bashrc && \
+#     echo '# Hack for TRooFit to load' >> /home/cmsusr/.bashrc && \
+#     echo 'LD_LIBRARY_PATH=/home/cmsusr/'"${CMSSW_VERSION}"'/lib:${LD_LIBRARY_PATH}' >> /home/cmsusr/.bashrc && \
+#     echo 'printf "\n# Sourcing cmsenv ..."' >> /home/cmsusr/.bashrc && \
+#     echo 'cmsenv' >> /home/cmsusr/.bashrc && \
+#     echo 'printf " DONE\n"' >> /home/cmsusr/.bashrc
+
 RUN --security=insecure . /mount_cvmfs.sh && \
     mount_cvmfs && \
     . /home/cmsusr/.bashrc && \
-    . /cvmfs/cms.cern.ch/cmsset_default.sh && \
     cmsrel "${CMSSW_VERSION}" && \
     cd "${CMSSW_VERSION}"/src && \
     cmsenv && \
-    export PATH="/cvmfs/cms.cern.ch/slc7_amd64_gcc900/external/cmake/3.18.2/bin:${PATH}" && \
-    git clone https://gitlab.cern.ch/will/TRooFit.git && \
-    cmake \
-        -DCMAKE_INSTALL_PREFIX=/home/cmsusr/"${CMSSW_VERSION}" \
-        -S TRooFit \
-        -B build && \
-    cmake build -LH && \
-    cmake \
-        --build build \
-        --clean-first \
-        --parallel $(($(nproc) - 1)) && \
-    cmake --build build --target install && \
-    rm -rf build && \
-    git clone \
-        --depth 1 \
-        https://github.com/cms-analysis/HiggsAnalysis-CombinedLimit.git \
-        --branch "${COMBINED_LIMIT_TAG}" \
-        --single-branch \
-        HiggsAnalysis/CombinedLimit && \
-    git clone \
-        --depth 1 \
-        https://github.com/nsmith-/CombineHarvester.git \
-        --branch "${COMBINE_HARVESTER_TAG}" \
-        --single-branch \
-        CombineHarvester && \
-    scram b --jobs $(($(nproc) - 1)) && \
-    cmsenv && \
     python3 -m pip --no-cache-dir --verbose install --upgrade --user pip setuptools wheel && \
-    python3 -m pip --no-cache-dir --verbose install --ignore-installed --upgrade --user 'pyhf[xmlio,minuit,contrib]' && \
+    python3 -m pip --no-cache-dir --verbose install --ignore-installed --upgrade --user 'pyhf' && \
     echo 'export PATH=/home/cmsusr/.local/bin:${PATH}' >> /home/cmsusr/.bashrc && \
     echo '# Hack for TRooFit to load' >> /home/cmsusr/.bashrc && \
     echo 'LD_LIBRARY_PATH=/home/cmsusr/'"${CMSSW_VERSION}"'/lib:${LD_LIBRARY_PATH}' >> /home/cmsusr/.bashrc && \
@@ -65,6 +80,6 @@ RUN --security=insecure . /mount_cvmfs.sh && \
 
 WORKDIR /home/cmsusr/"${CMSSW_VERSION}"/workarea
 
-USER cmsusr
+# USER cmsusr
 
 ENTRYPOINT ["/run.sh"]
