@@ -3,6 +3,8 @@
 ARG BASE_IMAGE=aperloff/cms-cvmfs-docker:latest
 FROM ${BASE_IMAGE} as base
 
+USER root
+
 ARG ARG_CVMFS_MOUNTS="cms.cern.ch oasis.opensciencegrid.org"
 ARG ARG_MY_UID
 ARG ARG_MY_GID
@@ -62,5 +64,7 @@ RUN --security=insecure . /mount_cvmfs.sh && \
     echo 'printf " DONE\n"' >> /home/cmsusr/.bashrc
 
 WORKDIR /home/cmsusr/"${CMSSW_VERSION}"/workarea
+
+USER cmsusr
 
 ENTRYPOINT ["/run.sh"]
