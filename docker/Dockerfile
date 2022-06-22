@@ -16,10 +16,10 @@ RUN . /cvmfs/cms.cern.ch/cmsset_default.sh && \
     cd "${CMSSW_VERSION}"/src && \
     cmsenv && \
     export PATH="/cvmfs/cms.cern.ch/slc7_amd64_gcc900/external/cmake/3.18.2/bin:${PATH}" && \
-    git clone https://gitlab.cern.ch/will/TRooFit.git && \
+    git clone https://gitlab.cern.ch/will/xroofit && \
     cmake \
         -DCMAKE_INSTALL_PREFIX=/home/cmsusr/"${CMSSW_VERSION}" \
-        -S TRooFit \
+        -S xroofit \
         -B build && \
     cmake build -LH && \
     cmake \
@@ -45,7 +45,7 @@ RUN . /cvmfs/cms.cern.ch/cmsset_default.sh && \
     python3 -m pip --no-cache-dir --verbose install --upgrade --user pip setuptools wheel && \
     python3 -m pip --no-cache-dir --verbose install --ignore-installed --upgrade --user 'pyhf[xmlio,minuit,contrib]' && \
     echo 'export PATH=/home/cmsusr/.local/bin:${PATH}' >> /home/cmsusr/.bashrc && \
-    echo '# Hack for TRooFit to load' >> /home/cmsusr/.bashrc && \
+    echo '# Hack for xroofit to load' >> /home/cmsusr/.bashrc && \
     echo 'LD_LIBRARY_PATH=/home/cmsusr/'"${CMSSW_VERSION}"'/lib:${LD_LIBRARY_PATH}' >> /home/cmsusr/.bashrc && \
     echo 'printf "\n# Sourcing cmsenv ..."' >> /home/cmsusr/.bashrc && \
     echo 'cmsenv' >> /home/cmsusr/.bashrc && \
