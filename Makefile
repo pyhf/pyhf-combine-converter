@@ -4,6 +4,7 @@ all: image
 
 image:
 	docker pull aperloff/cms-cvmfs-docker:latest
+	docker buildx prune -f
 	docker buildx create \
 		--driver-opt \
 		image=moby/buildkit:master \
