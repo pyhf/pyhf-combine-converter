@@ -62,3 +62,5 @@ RUN --security=insecure . /mount_cvmfs.sh && \
     echo 'printf " DONE\n"' >> /home/cmsusr/.bashrc
 
 WORKDIR /home/cmsusr/"${CMSSW_VERSION}"/workarea
+
+ENTRYPOINT ["/run.sh"]
