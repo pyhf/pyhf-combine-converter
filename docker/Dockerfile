@@ -1,4 +1,4 @@
-ARG BASE_IMAGE=aperloff/cms-cvmfs-docker:latest
+ARG BASE_IMAGE=aperloff/cms-cvmfs-docker:pyhf-v0.1.0
 FROM ${BASE_IMAGE} as base
 
 ENV CVMFS_MOUNTS="cms.cern.ch oasis.opensciencegrid.org"
