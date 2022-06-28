@@ -3,10 +3,10 @@ default: image
 all: image
 
 image:
-	docker pull aperloff/cms-cvmfs-docker:latest
+	docker pull aperloff/cms-cvmfs-docker:pyhf-v0.1.0
 	DOCKER_BUILDKIT=1 docker build . \
 		-f docker/Dockerfile \
-		--build-arg BASE_IMAGE=aperloff/cms-cvmfs-docker:latest \
+		--build-arg BASE_IMAGE=aperloff/cms-cvmfs-docker:pyhf-v0.1.0 \
 		--build-arg CVMFS_MOUNTS="cms.cern.ch oasis.opensciencegrid.org" \
 		--tag pyhf/pyhf-combine-converter:debug-local
 
@@ -19,7 +19,7 @@ run:
 		--cap-add SYS_ADMIN \
 		--security-opt apparmor:unconfined \
 		-e CVMFS_MOUNTS="cms.cern.ch oasis.opensciencegrid.org" \
-		aperloff/cms-cvmfs-docker:latest
+		aperloff/cms-cvmfs-docker:pyhf-v0.1.0
 
 image_dirty:
 	docker build . \
